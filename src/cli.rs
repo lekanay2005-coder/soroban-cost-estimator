@@ -13,6 +13,14 @@ pub struct Cli {
     #[arg(long, global = true, value_name = "N")]
     pub rps: Option<u64>,
 
+    /// Total request timeout for RPC calls in seconds.
+    ///
+    /// This is the maximum time allowed for the entire HTTP request
+    /// (connection + data transfer), separate from the connection timeout
+    /// which defaults to 10 seconds. Examples: "30", "60s", "120".
+    #[arg(long, global = true, value_name = "SECS")]
+    pub rpc_timeout: Option<u64>,
+
     #[command(subcommand)]
     pub command: Command,
 }
@@ -159,6 +167,11 @@ pub enum ConfigAction {
         /// Explicit snapshot path to compare against (defaults to latest).
         #[arg(long)]
         against: Option<String>,
+
+        /// Print a single-line summary (counts of pricing/non-pricing changes)
+        /// instead of the full diff. Useful for CI status lines.
+        #[arg(long)]
+        summary: bool,
     },
 
     /// Show the full chronological change log across all stored snapshots.
